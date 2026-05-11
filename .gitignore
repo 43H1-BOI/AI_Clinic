@@ -1,23 +1,75 @@
+docs/*
+
+
 # ── Secrets ──
 .env
+*.key
+*.pem
+*.cert
 
 # ── Database ──
 clinic.db
 *.db
 *.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
 
 # ── Generated Reports (keep reference docs/*.docx) ──
 Report.docx
 Report2.docx
+report*.docx
+report*.pdf
 
-# ── Windows Zone Identifiers (downloaded files) ──
+# ── Windows Nonsense ──
 *:Zone.Identifier
+*.Zone.Identifier
+desktop.ini
+Desktop.ini
+*$
+~$*
+*.lnk
+*.url
+
+# ── macOS Nonsense ──
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+Icon?
+*/.DS_Store
+
+# ── Linux Nonsense ──
+.directory
+*.lock
+*.fusiontemp*
 
 # ── Python Bytecode ──
 __pycache__/
 *.py[cod]
 *.pyo
 *$py.class
+*.so
+*.pyd
+
+# ── Python Test / Coverage Nonsense ──
+.pytest_cache/
+.coverage
+.coverage.*
+coverage/
+htmlcov/
+*.coverage
+.tox/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+*.tst
+*.out
+*.diff
 
 # ── Virtual Environment ──
 venv/
@@ -25,36 +77,72 @@ env/
 .venv/
 ENV/
 env.bak/
+venv.bak/
+.venv.bak/
+pip-log.txt
+pip-delete-this-directory.txt
 
-# ── Uploaded Files (audio, reports, transcripts) ──
+# ── Uploaded / Runtime Files ──
 uploads/
 uploads/audio/*
 uploads/reports/*
 uploads/transcripts/*
-
-# ── IDE / Editor ──
-.vscode/
-.idea/
+!uploads/audio/.gitkeep
+!uploads/reports/.gitkeep
+!uploads/transcripts/.gitkeep
+*.log
+*.tmp
+*.temp
 *.swp
 *.swo
 *~
-.DS_Store
-Thumbs.db
 
-# ── Python Packaging ──
+# ── IDE / Editor Nonsense ──
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.komodotools/
+*.sublime-project
+*.sublime-workspace
+*.orig
+*.bak
+*.backup
+
+# ── Python Packaging Nonsense ──
 *.egg-info/
+*.egg-info
 dist/
 build/
 *.egg
+*.whl
+*.tar.gz
+*.zip
+pip-wheel-metadata/
+parts/
+sdist/
+develop-eggs/
+.eggs/
+installed.cfg
+*.manifest
+*.spec
 
-# ── OS generated ──
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+# ── Streamlit / Runtime Nonsense ──
+.streamlit/
+*.streamlit
+config.yaml
 
-
-docs/*
+# ── Misc Nonsense ──
+node_modules/
+bower_components/
+*.pyc
+.env.local
+.env.production
+.env.development
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
