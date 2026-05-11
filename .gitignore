@@ -1,0 +1,60 @@
+# ── Secrets ──
+.env
+
+# ── Database ──
+clinic.db
+*.db
+*.sqlite
+
+# ── Generated Reports (keep reference docs/*.docx) ──
+Report.docx
+Report2.docx
+
+# ── Windows Zone Identifiers (downloaded files) ──
+*:Zone.Identifier
+
+# ── Python Bytecode ──
+__pycache__/
+*.py[cod]
+*.pyo
+*$py.class
+
+# ── Virtual Environment ──
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+
+# ── Uploaded Files (audio, reports, transcripts) ──
+uploads/
+uploads/audio/*
+uploads/reports/*
+uploads/transcripts/*
+
+# ── IDE / Editor ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ── Python Packaging ──
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ── OS generated ──
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+
+docs/*

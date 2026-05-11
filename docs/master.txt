@@ -1,0 +1,617 @@
+
+DR RAJAT AI CLINIC — COMPLETE MVP DEVELOPMENT MASTER PROMPT
+================================================================
+
+ROLE
+You are a senior full-stack AI engineer responsible for designing and developing a production-quality MVP for an AI-powered clinical management system called:
+
+“Dr Rajat AI Clinic”
+
+This clinic specializes in:
+- Chiropractic Therapy
+- Manual Osteopathy
+- Soft Chiropractic Therapy
+- Ayurveda
+- Panchakarma
+- Spine Disorders
+- Muscle Pain
+- Nerve Compression
+- Slip Disc
+- Sciatica
+- Cervical & Lumbar Pain
+- Joint Stiffness
+- Soft Tissue Injury
+- Bone Alignment
+
+The system should digitize:
+- Patient registration
+- Clinical assessments
+- Consultations
+- Treatments
+- Doctor-patient conversations
+- AI-generated clinical insights
+- Progress tracking
+- Dashboard and history
+
+========================================================
+IMPORTANT DEVELOPMENT PRINCIPLES
+========================================================
+
+PRIORITIZE:
+- Simplicity
+- Maintainability
+- Modularity
+- Clean UI
+- Fast development
+- Reliable CRUD operations
+- Future AI scalability
+
+DO NOT:
+- Overengineer
+- Use microservices
+- Add Kubernetes
+- Build enterprise authentication
+- Add unnecessary complexity
+
+This is an MVP for real clinic usage.
+
+========================================================
+TECH STACK
+========================================================
+
+Frontend/UI:
+- Streamlit
+
+Backend:
+- Python 3.12
+
+Database:
+- SQLite (MVP)
+- SQLAlchemy ORM
+
+AI/NLP:
+- Faster-Whisper
+- OpenAI GPT-4o-mini (pluggable)
+- Optional local Llama abstraction layer
+
+Visualization:
+- Plotly
+
+Validation:
+- Pydantic
+
+Utilities:
+- Pandas
+- Pillow
+- python-dotenv
+
+Deployment:
+- Streamlit Community Cloud OR Docker
+
+========================================================
+PROJECT STRUCTURE
+========================================================
+
+dr_rajat_ai_clinic/
+│
+├── app.py
+├── requirements.txt
+├── README.md
+├── .env
+│
+├── database/
+│   ├── db.py
+│   ├── models.py
+│   ├── crud.py
+│   ├── schema.py
+│   └── seed_data.py
+│
+├── pages/
+│   ├── patient_registration.py
+│   ├── pain_assessment.py
+│   ├── consultation.py
+│   ├── treatment.py
+│   ├── conversation.py
+│   ├── ai_analysis.py
+│   ├── progress_tracker.py
+│   └── dashboard.py
+│
+├── ai/
+│   ├── whisper_service.py
+│   ├── llm_service.py
+│   ├── risk_engine.py
+│   ├── symptom_extractor.py
+│   └── prompts.py
+│
+├── uploads/
+│   ├── audio/
+│   ├── reports/
+│   └── transcripts/
+│
+├── utils/
+│   ├── validators.py
+│   ├── constants.py
+│   ├── helpers.py
+│   └── ui_helpers.py
+│
+└── assets/
+    └── body_diagram.png
+
+========================================================
+DATABASE REQUIREMENTS
+========================================================
+
+Use SQLAlchemy ORM.
+
+Create these tables:
+
+--------------------------------------------------------
+1. PATIENTS
+--------------------------------------------------------
+
+Fields:
+- patient_id (PK)
+- full_name
+- age
+- gender
+- dob
+- mobile
+- email
+- occupation
+- height
+- weight
+- bmi
+- address
+- lifestyle
+- smoking_alcohol
+- existing_diseases
+- previous_spine_surgery
+- emergency_contact
+- created_at
+
+Features:
+- Auto-generated patient ID
+- BMI auto-calculation
+- CRUD operations
+- Search support
+
+--------------------------------------------------------
+2. PAIN_ASSESSMENTS
+--------------------------------------------------------
+
+Fields:
+- assessment_id
+- patient_id (FK)
+- main_problem
+- pain_areas
+- spine_level
+- pain_severity
+- pain_type
+- duration
+- triggering_activity
+- movement_limitation
+- numbness
+- muscle_weakness
+- nerve_radiation
+- sleep_disturbance
+- posture_problem
+- stress_level
+- created_at
+
+--------------------------------------------------------
+3. CONSULTATIONS
+--------------------------------------------------------
+
+Fields:
+- consultation_id
+- patient_id
+- doctor_name
+- specialization
+- consultation_datetime
+- chief_complaint
+- clinical_findings
+- examination_notes
+- preliminary_diagnosis
+- recommended_scan
+- uploaded_report_path
+- followup_date
+
+--------------------------------------------------------
+4. TREATMENTS
+--------------------------------------------------------
+
+Fields:
+- treatment_id
+- consultation_id
+- therapy_types
+- chiropractic_area
+- soft_tissue_therapy
+- nerve_handling
+- muscle_therapy
+- bone_alignment
+- ayurveda_medicine
+- panchakarma_type
+- oil_used
+- home_exercise
+- posture_advice
+- session_duration
+- session_outcome
+
+--------------------------------------------------------
+5. CONVERSATIONS
+--------------------------------------------------------
+
+Fields:
+- conversation_id
+- consultation_id
+- source_type
+- audio_path
+- transcript
+- language
+- speaker_separation
+- emotional_state
+- pain_keywords
+- additional_notes
+- created_at
+
+--------------------------------------------------------
+6. AI_OUTPUTS
+--------------------------------------------------------
+
+Fields:
+- ai_result_id
+- conversation_id
+- ai_summary
+- extracted_symptoms
+- body_area_detected
+- possible_condition
+- predicted_pain_severity
+- recommended_therapy
+- recommended_tests
+- suggested_ayurveda
+- risk_level
+- surgery_probability
+- recovery_prediction
+- followup_suggestion
+- confidence_score
+- raw_json
+
+--------------------------------------------------------
+7. PROGRESS_TRACKING
+--------------------------------------------------------
+
+Fields:
+- progress_id
+- patient_id
+- session_number
+- progress_date
+- previous_pain_score
+- current_pain_score
+- mobility_improvement
+- sleep_improvement
+- numbness_improvement
+- patient_feedback
+- practitioner_remark
+
+========================================================
+STREAMLIT UI REQUIREMENTS
+========================================================
+
+Sidebar navigation:
+- Add Patient
+- Pain Assessment
+- Consultation Entry
+- Treatment Session
+- Upload Conversation
+- AI Analysis
+- Progress Tracker
+- Dashboard / History
+
+Use:
+- st.form
+- st.tabs
+- st.expander
+- st.columns
+- st.metric
+- Plotly charts
+
+Design style:
+- Medical
+- Minimal
+- Professional
+- Responsive
+- Fast
+
+========================================================
+MODULE REQUIREMENTS
+========================================================
+
+--------------------------------------------------------
+MODULE 1 — PATIENT MANAGEMENT
+--------------------------------------------------------
+
+Features:
+- Add patient
+- Edit patient
+- Delete patient
+- Search patient
+- Auto BMI calculation
+- Required field validation
+- Mobile validation
+- Duplicate detection
+
+--------------------------------------------------------
+MODULE 2 — PAIN ASSESSMENT
+--------------------------------------------------------
+
+Features:
+- Pain score slider (0-10)
+- Multi-select pain areas
+- Spine level selection
+- Posture issues
+- Stress level
+- Sleep disturbance tracking
+- Save assessments linked to patient
+
+--------------------------------------------------------
+MODULE 3 — CONSULTATION
+--------------------------------------------------------
+
+Features:
+- Consultation notes
+- Doctor details
+- MRI/X-ray/PDF upload
+- Diagnosis entry
+- Follow-up scheduling
+
+--------------------------------------------------------
+MODULE 4 — TREATMENT
+--------------------------------------------------------
+
+Features:
+- Multi-select therapy
+- Treatment notes
+- Exercise advice
+- Session outcome logging
+
+--------------------------------------------------------
+MODULE 5 — CONVERSATION CAPTURE
+--------------------------------------------------------
+
+Features:
+- Audio upload
+- Manual transcript entry
+- Faster-Whisper transcription
+- Hindi + English support
+- Save transcript
+- Keyword extraction
+
+Supported formats:
+- mp3
+- wav
+- m4a
+
+--------------------------------------------------------
+MODULE 6 — AI ANALYSIS
+--------------------------------------------------------
+
+Input:
+- Transcript
+- Consultation
+- Assessment
+
+Output JSON format:
+
+{
+  "summary": "",
+  "symptoms": [],
+  "possible_condition": "",
+  "risk_level": "",
+  "recommended_therapy": [],
+  "recommended_tests": [],
+  "pain_severity": 0,
+  "recovery_prediction": "",
+  "followup": "",
+  "confidence_score": 0
+}
+
+========================================================
+AI ENGINE REQUIREMENTS
+========================================================
+
+Layer 1:
+Rule-based risk engine using Python if-else logic.
+
+Example:
+
+if pain_severity >= 8 and numbness:
+    risk = "HIGH"
+
+Layer 2:
+LLM summarization.
+
+Use:
+- GPT-4o-mini
+OR
+- Pluggable abstraction
+
+Tasks:
+- Summarize consultation
+- Extract symptoms
+- Recommend therapies
+- Predict risk
+- Return valid JSON
+
+========================================================
+AI SAFETY RULES
+========================================================
+
+- Always validate JSON
+- Use retry mechanism
+- Use Pydantic schema validation
+- Never crash on malformed AI response
+- Store raw AI response
+
+========================================================
+DASHBOARD REQUIREMENTS
+========================================================
+
+Search filters:
+- Patient ID
+- Name
+- Mobile
+- Pain Area
+- Spine Level
+
+Summary Cards:
+- Current pain score
+- Session count
+- Latest diagnosis
+- Recovery status
+
+Charts:
+- Pain trend
+- Recovery trend
+- Session improvements
+
+Detailed View:
+- Consultations
+- Treatments
+- AI outputs
+- Uploaded reports
+- Transcripts
+
+========================================================
+FILE STORAGE REQUIREMENTS
+========================================================
+
+Store locally:
+
+uploads/audio/
+uploads/reports/
+uploads/transcripts/
+
+Generate unique filenames.
+
+========================================================
+ERROR HANDLING
+========================================================
+
+Handle:
+- Missing patient
+- Invalid uploads
+- Database errors
+- AI parsing failures
+- Whisper transcription errors
+
+========================================================
+README REQUIREMENTS
+========================================================
+
+README must include:
+- Setup instructions
+- Installation
+- Environment variables
+- Project architecture
+- Features
+- Future scope
+
+Setup:
+
+python -m venv venv
+pip install -r requirements.txt
+streamlit run app.py
+
+========================================================
+REQUIREMENTS.TXT
+========================================================
+
+Include:
+- streamlit
+- sqlalchemy
+- pandas
+- plotly
+- openai
+- faster-whisper
+- pydantic
+- python-dotenv
+- pillow
+
+========================================================
+DEPLOYMENT REQUIREMENTS
+========================================================
+
+Application should support:
+- Local execution
+- Docker deployment
+- Streamlit cloud deployment
+
+========================================================
+TESTING REQUIREMENTS
+========================================================
+
+Implement:
+- CRUD testing
+- AI response validation
+- File upload validation
+- Database integrity checks
+
+========================================================
+FUTURE SCALABILITY
+========================================================
+
+Architecture must allow future migration to:
+- PostgreSQL
+- FastAPI
+- React frontend
+- ML models
+- Cloud AI services
+
+But DO NOT implement them now.
+
+========================================================
+BUILD EXECUTION ORDER
+========================================================
+
+1. Setup project
+2. Create database
+3. Build ORM models
+4. Create CRUD layer
+5. Build Streamlit pages
+6. Add file uploads
+7. Integrate Faster-Whisper
+8. Add AI pipeline
+9. Create dashboard
+10. Add charts
+11. Testing
+12. Final cleanup
+
+========================================================
+FINAL DELIVERY REQUIREMENTS
+========================================================
+
+Provide:
+1. Complete source code
+2. Working Streamlit app
+3. requirements.txt
+4. README.md
+5. SQLite DB setup
+6. Sample dummy data
+7. Upload support
+8. AI integration
+9. Error handling
+10. Clean modular architecture
+
+========================================================
+IMPORTANT FINAL NOTE
+========================================================
+
+The MVP must be:
+- Fully functional
+- Cleanly coded
+- Clinician friendly
+- AI-ready
+- Easily extendable
+
+Always generate WORKING CODE.
+Never stop midway.
