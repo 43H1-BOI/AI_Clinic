@@ -83,8 +83,8 @@ def render_patient_dashboard(patient):
         if progress_entries:
             first = progress_entries[-1]
             last = progress_entries[0]
-            first_score = first.current_pain_score or (first.previous_pain_score or 0)
-            last_score = last.current_pain_score or 0
+            first_score = first.current_pain_score if first.current_pain_score is not None else (first.previous_pain_score or 0)
+            last_score = last.current_pain_score if last.current_pain_score is not None else 0
             diff = first_score - last_score
             status = "Improving" if diff > 0 else "Stable" if diff == 0 else "Worsening"
             st.metric("Recovery Status", status, delta=f"{diff:+d}" if diff != 0 else None)
@@ -107,32 +107,40 @@ def render_patient_dashboard(patient):
 
     if progress_entries:
         st.subheader("Pain Trend")
-        progress_df = pd.DataFrame([{
-            "session": p.session_number or i + 1,
-            "previous": p.previous_pain_score,
-            "current": p.current_pain_score,
-            "date": p.progress_date or "",
-        } for i, p in enumerate(reversed(progress_entries))])
+        rows = []
+        for i, p in enumerate(reversed(progress_entries)):
+            if p.previous_pain_score is None and p.current_pain_score is None:
+                continue
+            rows.append({
+                "session": p.session_number or i + 1,
+                "previous": p.previous_pain_score,
+                "current": p.current_pain_score,
+                "date": p.progress_date or "",
+            })
 
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(
-            x=progress_df["session"], y=progress_df["previous"],
-            mode="lines+markers", name="Previous Pain",
-            line=dict(color="orange", width=2),
-        ))
-        fig.add_trace(go.Scatter(
-            x=progress_df["session"], y=progress_df["current"],
-            mode="lines+markers", name="Current Pain",
-            line=dict(color="green", width=2),
-        ))
-        fig.update_layout(
-            title="Pain Score Trend Across Sessions",
-            xaxis_title="Session Number",
-            yaxis_title="Pain Score (0-10)",
-            yaxis=dict(range=[0, 10]),
-            height=400,
-        )
-        st.plotly_chart(fig, width='stretch')
+        if rows:
+            progress_df = pd.DataFrame(rows)
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(
+                x=progress_df["session"], y=progress_df["previous"],
+                mode="lines+markers", name="Previous Pain",
+                line=dict(color="orange", width=2),
+            ))
+            fig.add_trace(go.Scatter(
+                x=progress_df["session"], y=progress_df["current"],
+                mode="lines+markers", name="Current Pain",
+                line=dict(color="green", width=2),
+            ))
+            fig.update_layout(
+                title="Pain Score Trend Across Sessions",
+                xaxis_title="Session Number",
+                yaxis_title="Pain Score (0-10)",
+                yaxis=dict(range=[0, 10]),
+                height=400,
+            )
+            st.plotly_chart(fig, width='stretch')
+        else:
+            st.info("No pain score data available for chart.")
 
         if len(progress_entries) >= 2:
             st.subheader("Improvement Radar")

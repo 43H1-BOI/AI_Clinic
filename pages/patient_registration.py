@@ -23,6 +23,7 @@ def render():
             with col2:
                 height = st.number_input("Height (cm)", min_value=0.0, max_value=250.0, step=0.1, format="%.1f")
                 weight = st.number_input("Weight (kg)", min_value=0.0, max_value=300.0, step=0.1, format="%.1f")
+                bmi = None
                 if height > 0 and weight > 0:
                     bmi = weight / ((height / 100) ** 2)
                     st.metric("Calculated BMI", f"{bmi:.1f}")
@@ -57,6 +58,7 @@ def render():
                         "occupation": occupation.strip() if occupation else None,
                         "height": height if height > 0 else None,
                         "weight": weight if weight > 0 else None,
+                        "bmi": round(bmi, 1) if bmi is not None else None,
                         "dob": dob.strip() if dob else None,
                         "lifestyle": lifestyle if lifestyle else None,
                         "smoking_alcohol": smoking_alcohol.strip() if smoking_alcohol else None,
@@ -95,6 +97,8 @@ def render():
                             with col2:
                                 height = st.number_input("Height (cm)", value=patient.height or 0.0, key=f"h_{patient.patient_id}")
                                 weight = st.number_input("Weight (kg)", value=patient.weight or 0.0, key=f"w_{patient.patient_id}")
+                                if height > 0 and weight > 0:
+                                    st.metric("BMI", f"{weight / ((height / 100) ** 2):.1f}")
                                 existing = st.text_area("Existing Diseases", value=patient.existing_diseases or "", key=f"dis_{patient.patient_id}")
                                 prev_surg = st.selectbox("Previous Spine Surgery", ["", "No", "Yes"], index=0 if not patient.previous_spine_surgery else (1 if patient.previous_spine_surgery == "No" else 2), key=f"sur_{patient.patient_id}")
                             c1, c2 = st.columns(2)
@@ -114,6 +118,7 @@ def render():
                                             "mobile": mobile.strip(),
                                             "height": height if height > 0 else None,
                                             "weight": weight if weight > 0 else None,
+                                            "bmi": round(weight / ((height / 100) ** 2), 1) if height > 0 and weight > 0 else None,
                                             "existing_diseases": existing.strip() if existing else None,
                                             "previous_spine_surgery": prev_surg if prev_surg else None,
                                         }

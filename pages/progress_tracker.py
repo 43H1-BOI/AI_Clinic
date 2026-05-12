@@ -31,13 +31,13 @@ def render():
 
     last_pain_score = 0
     session_count = len(previous_entries) + 1
-    if assessments:
-        last_pain_score = assessments[0].pain_severity or 0
+    if assessments and assessments[0].pain_severity is not None:
+        last_pain_score = assessments[0].pain_severity
     if previous_entries:
         last_entry = previous_entries[0]
         if last_entry.current_pain_score is not None:
             last_pain_score = last_entry.current_pain_score
-        session_count = (last_entry.session_number or 0) + 1
+        session_count = (last_entry.session_number + 1) if last_entry.session_number is not None else len(previous_entries) + 1
 
     st.subheader(f"Session #{session_count}")
     with st.form("progress_form"):
@@ -94,8 +94,8 @@ def render():
 
         first_entry = previous_entries[-1]
         last_entry = previous_entries[0]
-        first_score = first_entry.current_pain_score or 0
-        last_score = last_entry.current_pain_score or 0
+        first_score = first_entry.current_pain_score if first_entry.current_pain_score is not None else 0
+        last_score = last_entry.current_pain_score if last_entry.current_pain_score is not None else 0
         improvement = first_score - last_score
         if improvement > 0:
             st.metric("Pain Reduction", f"-{improvement}/10", delta=f"↓ {improvement}")
