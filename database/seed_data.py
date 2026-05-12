@@ -605,7 +605,17 @@ def seed_database():
         db.close()
         return
 
-    df = pd.read_excel(DATA_FILE)
+    try:
+        df = pd.read_excel(DATA_FILE)
+    except ImportError:
+        print("openpyxl not available. Install with: pip install openpyxl")
+        db.close()
+        return
+    except Exception as e:
+        print(f"Error reading data.xlsx: {e}")
+        db.close()
+        return
+
     print(f"Loading {len(df)} patients from data.xlsx...")
     patient_count = 0
     total_consultations = 0

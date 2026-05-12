@@ -20,7 +20,10 @@ def main():
     apply_custom_css()
 
     init_db()
-    seed_database()
+    try:
+        seed_database()
+    except Exception:
+        pass
 
     st.sidebar.title("Dr Rajat AI Clinic")
     st.sidebar.markdown("---")
