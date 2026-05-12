@@ -4,34 +4,14 @@ from database.models import Patient, PainAssessment, Consultation, Treatment, Co
 
 
 def calculate_bmi(height_cm, weight_kg):
-    """Calculate BMI.
+    if height_cm and weight_kg and height_cm > 0:
+        height_m = height_cm / 100.0
+        return round(weight_kg / (height_m * height_m), 1)
+    return None
 
-    Accepts height in centimeters or meters (auto-detects meters when value < 3).
-    Coerces numeric-like inputs (strings) to float and returns None for invalid inputs.
-    """
-    try:
-        if height_cm is None or weight_kg is None:
-            return None
-        h = float(height_cm)
-        w = float(weight_kg)
-    except (TypeError, ValueError):
-        return None
 
-    if h <= 0 or w <= 0:
-        return None
-
-    # If height looks like meters (e.g., 1.7) treat as meters; otherwise treat as cm
-    if h < 3:
-        height_m = h
-    else:
-        height_m = h / 100.0
-
-    try:
-        bmi = w / (height_m * height_m)
-    except ZeroDivisionError:
-        return None
-
-    return round(bmi, 1)
+def get_patient_by_mobile(db: Session, mobile: str):
+    return db.query(Patient).filter(Patient.mobile == mobile).first()
 
 
 def create_patient(db: Session, data: dict):

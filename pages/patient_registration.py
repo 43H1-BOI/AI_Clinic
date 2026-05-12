@@ -1,6 +1,7 @@
 import streamlit as st
 from database.db import get_session
-from database.crud import create_patient, update_patient, delete_patient, search_patients, get_all_patients, get_patient_by_mobile
+from database.crud import create_patient, update_patient, delete_patient, search_patients, get_all_patients
+from database.models import Patient
 from utils.ui_helpers import show_success, show_error, show_info
 from utils.validators import validate_mobile, validate_age
 import pandas as pd
@@ -69,7 +70,7 @@ def render():
                     }
                     db = get_session()
                     try:
-                        existing = get_patient_by_mobile(db, data["mobile"])
+                        existing = db.query(Patient).filter(Patient.mobile == data["mobile"]).first()
                         if existing:
                             show_error(f"Patient with this mobile already exists (ID: {existing.patient_id} - {existing.full_name}). Use Search/Edit tab to update.")
                         else:
