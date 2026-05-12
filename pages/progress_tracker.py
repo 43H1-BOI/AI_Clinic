@@ -71,8 +71,12 @@ def render():
             }
             db = get_session()
             try:
-                create_progress(db, data)
-                show_success("Progress saved!")
+                existing_progress = get_progress(db, patient_id)
+                if any(p.session_number == session_count for p in existing_progress):
+                    show_error(f"Session #{session_count} already exists. Refresh the page to continue.")
+                else:
+                    create_progress(db, data)
+                    show_success("Progress saved!")
             except Exception as e:
                 show_error(f"Error: {str(e)}")
             finally:

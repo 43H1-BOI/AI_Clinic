@@ -7,7 +7,7 @@ from database.crud import (
     get_all_patients, get_pain_assessments, get_progress, search_patients,
     get_consultations, get_treatments, get_conversations
 )
-from utils.ui_helpers import show_info
+
 from database.models import Patient, Treatment, Conversation
 
 
@@ -74,7 +74,7 @@ def render_patient_dashboard(patient):
     with col1:
         st.metric("Current Pain Score", latest_pain_display)
     with col2:
-        st.metric("Session Count", len(progress_entries) or "0")
+        st.metric("Session Count", len(progress_entries))
     with col3:
         latest_diag = consultations[0].preliminary_diagnosis if consultations else None
         latest_diag_display = latest_diag or "N/A"

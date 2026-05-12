@@ -1,6 +1,6 @@
 import streamlit as st
 from database.db import get_session
-from database.crud import create_patient, update_patient, delete_patient, search_patients, get_all_patients
+from database.crud import create_patient, update_patient, delete_patient, search_patients, get_all_patients, get_patient_by_mobile
 from utils.ui_helpers import show_success, show_error, show_info
 from utils.validators import validate_mobile, validate_age
 import pandas as pd
@@ -69,8 +69,12 @@ def render():
                     }
                     db = get_session()
                     try:
-                        patient = create_patient(db, data)
-                        show_success(f"Patient registered successfully! ID: {patient.patient_id}")
+                        existing = get_patient_by_mobile(db, data["mobile"])
+                        if existing:
+                            show_error(f"Patient with this mobile already exists (ID: {existing.patient_id} - {existing.full_name}). Use Search/Edit tab to update.")
+                        else:
+                            patient = create_patient(db, data)
+                            show_success(f"Patient registered successfully! ID: {patient.patient_id}")
                     except Exception as e:
                         show_error(f"Error: {str(e)}")
                     finally:
@@ -94,12 +98,22 @@ def render():
                                 age = st.number_input("Age", value=patient.age or 0, key=f"age_{patient.patient_id}")
                                 gender = st.selectbox("Gender", ["Male", "Female", "Other"], index=["Male", "Female", "Other"].index(patient.gender) if patient.gender in ["Male", "Female", "Other"] else 0, key=f"gender_{patient.patient_id}")
                                 mobile = st.text_input("Mobile", value=patient.mobile or "", key=f"mobile_{patient.patient_id}")
+                                email = st.text_input("Email", value=patient.email or "", key=f"email_{patient.patient_id}")
+                                occupation = st.text_input("Occupation", value=patient.occupation or "", key=f"occ_{patient.patient_id}")
                             with col2:
                                 height = st.number_input("Height (cm)", value=patient.height or 0.0, key=f"h_{patient.patient_id}")
                                 weight = st.number_input("Weight (kg)", value=patient.weight or 0.0, key=f"w_{patient.patient_id}")
                                 if height > 0 and weight > 0:
                                     st.metric("BMI", f"{weight / ((height / 100) ** 2):.1f}")
-                                existing = st.text_area("Existing Diseases", value=patient.existing_diseases or "", key=f"dis_{patient.patient_id}")
+                                dob = st.text_input("Date of Birth", value=patient.dob or "", key=f"dob_{patient.patient_id}")
+                                lifestyle = st.selectbox("Lifestyle", ["", "Sedentary", "Moderately Active", "Active", "Highly Active"], index=0 if not patient.lifestyle else (["", "Sedentary", "Moderately Active", "Active", "Highly Active"].index(patient.lifestyle) if patient.lifestyle in ["", "Sedentary", "Moderately Active", "Active", "Highly Active"] else 0), key=f"life_{patient.patient_id}")
+                                smoking_alcohol = st.text_input("Smoking / Alcohol", value=patient.smoking_alcohol or "", key=f"sa_{patient.patient_id}")
+                            existing = st.text_area("Existing Diseases", value=patient.existing_diseases or "", key=f"dis_{patient.patient_id}")
+                            col3, col4 = st.columns(2)
+                            with col3:
+                                address = st.text_area("Address", value=patient.address or "", key=f"addr_{patient.patient_id}")
+                                emergency_contact = st.text_input("Emergency Contact", value=patient.emergency_contact or "", key=f"emerg_{patient.patient_id}")
+                            with col4:
                                 prev_surg = st.selectbox("Previous Spine Surgery", ["", "No", "Yes"], index=0 if not patient.previous_spine_surgery else (1 if patient.previous_spine_surgery == "No" else 2), key=f"sur_{patient.patient_id}")
                             c1, c2 = st.columns(2)
                             with c1:
@@ -116,11 +130,18 @@ def render():
                                             "age": int(age),
                                             "gender": gender,
                                             "mobile": mobile.strip(),
+                                            "email": email.strip() if email else None,
+                                            "occupation": occupation.strip() if occupation else None,
                                             "height": height if height > 0 else None,
                                             "weight": weight if weight > 0 else None,
                                             "bmi": round(weight / ((height / 100) ** 2), 1) if height > 0 and weight > 0 else None,
+                                            "dob": dob.strip() if dob else None,
+                                            "lifestyle": lifestyle if lifestyle else None,
+                                            "smoking_alcohol": smoking_alcohol.strip() if smoking_alcohol else None,
+                                            "address": address.strip() if address else None,
                                             "existing_diseases": existing.strip() if existing else None,
                                             "previous_spine_surgery": prev_surg if prev_surg else None,
+                                            "emergency_contact": emergency_contact.strip() if emergency_contact else None,
                                         }
                                         update_patient(db, patient.patient_id, data)
                                         show_success("Patient updated!")

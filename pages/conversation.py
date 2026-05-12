@@ -103,26 +103,29 @@ def render():
             additional_notes = st.text_area("Additional Notes")
 
             submitted = st.form_submit_button("Save Transcript", type="primary", width='stretch')
-            if submitted and transcript:
-                symptoms = extract_symptoms(transcript)
-                data = {
-                    "consultation_id": consultation_id,
-                    "source_type": "manual",
-                    "transcript": transcript.strip(),
-                    "language": language.strip() if language else None,
-                    "speaker_separation": speaker_separation.strip() if speaker_separation else None,
-                    "emotional_state": emotional_state.strip() if emotional_state else None,
-                    "additional_notes": additional_notes.strip() if additional_notes else None,
-                    "pain_keywords": ", ".join(symptoms["pain_keywords"]),
-                }
-                db = get_session()
-                try:
-                    create_conversation(db, data)
-                    show_success("Transcript saved!")
-                except Exception as e:
-                    show_error(f"Error: {str(e)}")
-                finally:
-                    db.close()
+            if submitted:
+                if not transcript:
+                    show_error("Transcript content is required.")
+                else:
+                    symptoms = extract_symptoms(transcript)
+                    data = {
+                        "consultation_id": consultation_id,
+                        "source_type": "manual",
+                        "transcript": transcript.strip(),
+                        "language": language.strip() if language else None,
+                        "speaker_separation": speaker_separation.strip() if speaker_separation else None,
+                        "emotional_state": emotional_state.strip() if emotional_state else None,
+                        "additional_notes": additional_notes.strip() if additional_notes else None,
+                        "pain_keywords": ", ".join(symptoms["pain_keywords"]),
+                    }
+                    db = get_session()
+                    try:
+                        create_conversation(db, data)
+                        show_success("Transcript saved!")
+                    except Exception as e:
+                        show_error(f"Error: {str(e)}")
+                    finally:
+                        db.close()
 
     db = get_session()
     try:
